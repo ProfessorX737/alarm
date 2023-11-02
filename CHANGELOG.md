@@ -1,3 +1,6 @@
+## 2.2.0
+* [Android] Move alarm service to native code.
+
 ## 2.1.0
 **Android installation steps were updated.**
 * [Android] Add parameter [androidFullScreenIntent] that turns screen on when alarm notification is triggered.
