@@ -60,7 +60,7 @@ public class SwiftAlarmPlugin: NSObject, FlutterPlugin {
             } else if call.method == "setAudioVolume" {
                 let args = call.arguments as! Dictionary<String, Any>
                 let id = args["id"] as! Int
-                let audioVolume = args["audioVolume"] as! Double
+                let audioVolume = args["audioVolume"] as! Float
                 self.setAudioVolume(id: id, audioVolume: audioVolume);
             } else {
                 DispatchQueue.main.sync {
@@ -249,10 +249,27 @@ public class SwiftAlarmPlugin: NSObject, FlutterPlugin {
     }
 
     private func setVibrate(vibrate: Bool) {
+        var firstPlayingAudioPlayer: AVAudioPlayer?
+        
+        // Iterate through all audioPlayers to check if any is playing
+        for (_, audioPlayer) in self.audioPlayers {
+            if audioPlayer.isPlaying {
+                firstPlayingAudioPlayer = audioPlayer
+                break // Stop the loop as we found a playing audio player
+            }
+        }
+        
+        // Trigger vibrations if currently playing
+        if !self.vibrate && firstPlayingAudioPlayer != nil && vibrate {
+            self.triggerVibrations()
+        }
+        
+        // Set the vibrate state
         self.vibrate = vibrate
     }
 
-    private func setAudioVolume(id: Int, audioVolume: Double) {
+
+    private func setAudioVolume(id: Int, audioVolume: Float) {
         guard let audioPlayer = self.audioPlayers[id] else {
             return
         }

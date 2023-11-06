@@ -276,6 +276,15 @@ class AndroidAlarm {
     return await AndroidAlarmManager.cancel(id);
   }
 
+  static bool setVibrate(bool vibrate) {
+    if (isRinging && !vibrationsActive && vibrate) {
+      triggerVibrations(duration: null);
+    }
+    vibrationsActive = vibrate;
+    alarmPrint('Alarm vibrate set to $vibrate');
+    return true;
+  }
+
   static setAudioVolume(int id, double audioVolume) {
     final send = IsolateNameServer.lookupPortByName(stopPort);
 

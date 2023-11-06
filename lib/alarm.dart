@@ -140,6 +140,18 @@ class Alarm {
     return iOS ? await IOSAlarm.stopAlarm(id) : await AndroidAlarm.stop(id);
   }
 
+  static Future<bool> setVibrate(bool vibrate) async {
+    return iOS
+        ? await IOSAlarm.setVibrate(vibrate)
+        : AndroidAlarm.setVibrate(vibrate);
+  }
+
+  static Future<bool> setAudioVolume(int id, double audioVolume) async {
+    return iOS
+        ? await IOSAlarm.setAudioVolume(id, audioVolume)
+        : AndroidAlarm.setAudioVolume(id, audioVolume);
+  }
+
   /// Stops all the alarms.
   static Future<void> stopAll() async {
     final alarms = AlarmStorage.getSavedAlarms();
