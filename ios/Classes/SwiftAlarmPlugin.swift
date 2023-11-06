@@ -38,6 +38,7 @@ public class SwiftAlarmPlugin: NSObject, FlutterPlugin {
     private var vibrate = false
     private var playSilent = false
     private var previousVolume: Float? = nil
+    private var respectSilentMode = false
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         DispatchQueue.global(qos: .default).async {
@@ -92,6 +93,7 @@ public class SwiftAlarmPlugin: NSObject, FlutterPlugin {
         let systemVolume = args["systemVolume"] as? Float
         let audioVolume = args["audioVolume"] as! Float
         let assetAudio = args["assetAudio"] as! String
+        respectSilentMode = args["respectSilentMode"] as? Bool ?? false
 
         if assetAudio.hasPrefix("assets/") {
             let filename = registrar.lookupKey(forAsset: assetAudio)
@@ -397,6 +399,7 @@ public class SwiftAlarmPlugin: NSObject, FlutterPlugin {
 
     private func mixOtherAudios() {
         do {
+            let category = respectSilentMode ? AVAudioSession.Category.ambient : AVAudioSession.Category.playback
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers])
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
