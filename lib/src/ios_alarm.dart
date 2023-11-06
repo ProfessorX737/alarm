@@ -95,6 +95,30 @@ class IOSAlarm {
     return res;
   }
 
+  static Future<bool> setAudioVolume(int id, double audioVolume) async {
+    final res = await methodChannel.invokeMethod<bool?>(
+          'setAudioVolume',
+          {'id': id, 'audioVolume': audioVolume},
+        ) ??
+        false;
+
+    if (res) alarmPrint('Alarm with id $id volume set to $audioVolume');
+
+    return res;
+  }
+
+  static Future<bool> setVibrate(bool vibrate) async {
+    final res = await methodChannel.invokeMethod<bool?>(
+          'setVibrate',
+          {'vibrate': vibrate},
+        ) ??
+        false;
+
+    if (res) alarmPrint('Alarm vibrate set to $vibrate');
+
+    return res;
+  }
+
   /// Checks whether alarm is ringing by getting the native audio player's
   /// current time at two different moments. If the two values are different,
   /// it means the alarm is ringing and then returns `true`.

@@ -204,10 +204,14 @@ class AndroidAlarm {
 
       port.listen((message) async {
         send.send('(isolate) received: $message');
-        if (message == 'stop') {
+        final op = message['op'] as String;
+        if (op == 'stop') {
           await audioPlayer.stop();
           await audioPlayer.dispose();
           port.close();
+        } else if (op == 'setAudioVolume') {
+          final audioVolume = message['audioVolume'] as double;
+          audioPlayer.setVolume(audioVolume);
         }
       });
     } catch (e) {
@@ -258,7 +262,7 @@ class AndroidAlarm {
     final send = IsolateNameServer.lookupPortByName(stopPort);
 
     if (send != null) {
-      send.send('stop');
+      send.send({'op': 'stop'});
       alarmPrint('Alarm with id $id stopped');
     }
 
@@ -270,6 +274,15 @@ class AndroidAlarm {
     if (!hasOtherAlarms) stopNotificationOnKillService();
 
     return await AndroidAlarmManager.cancel(id);
+  }
+
+  static setAudioVolume(int id, double audioVolume) {
+    final send = IsolateNameServer.lookupPortByName(stopPort);
+
+    if (send != null) {
+      send.send({'op': 'stop', 'audioVolume': audioVolume});
+      alarmPrint('Alarm with id $id volume set to $audioVolume');
+    }
   }
 
   static Future<void> stopNotificationOnKillService() async {

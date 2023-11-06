@@ -53,6 +53,15 @@ public class SwiftAlarmPlugin: NSObject, FlutterPlugin {
                 let args = call.arguments as! Dictionary<String, Any>
                 let id = args["id"] as! Int
                 self.audioCurrentTime(id: id, result: result)
+            } else if call.method == "setVibrate" {
+                let args = call.arguments as! Dictionary<String, Any>
+                let vibrate = args["vibrate"] as! Bool
+                self.setVibrate(vibrate: vibrate);
+            } else if call.method == "setAudioVolume" {
+                let args = call.arguments as! Dictionary<String, Any>
+                let id = args["id"] as! Int
+                let audioVolume = args["audioVolume"] as! Double
+                self.setAudioVolume(id: id, audioVolume: audioVolume);
             } else {
                 DispatchQueue.main.sync {
                     result(FlutterMethodNotImplemented)
@@ -237,6 +246,18 @@ public class SwiftAlarmPlugin: NSObject, FlutterPlugin {
             self.setVolume(systemVolume: systemVolumeValue, enable: true)
         }
         audioPlayer.setVolume(audioVolume, fadeDuration: fadeDuration)
+    }
+
+    private func setVibrate(vibrate: Bool) {
+        self.vibrate = vibrate
+    }
+
+    private func setAudioVolume(id: Int, audioVolume: Double) {
+        guard let audioPlayer = self.audioPlayers[id] else {
+            return
+        }
+
+        audioPlayer.setVolume(audioVolume, fadeDuration: 0.0)
     }
 
     private func stopAlarm(id: Int, result: FlutterResult) {
