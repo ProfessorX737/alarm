@@ -292,6 +292,8 @@ class AndroidAlarm {
       send.send({'op': 'stop', 'audioVolume': audioVolume});
       alarmPrint('Alarm with id $id volume set to $audioVolume');
     }
+
+    return true;
   }
 
   static Future<void> stopNotificationOnKillService() async {
