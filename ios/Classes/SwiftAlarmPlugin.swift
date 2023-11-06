@@ -409,6 +409,7 @@ public class SwiftAlarmPlugin: NSObject, FlutterPlugin {
 
     private func duckOtherAudios() {
         do {
+            let category = respectSilentMode ? AVAudioSession.Category.ambient : AVAudioSession.Category.playback
             try AVAudioSession.sharedInstance().setCategory(category, mode: .default, options: [.duckOthers])
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
