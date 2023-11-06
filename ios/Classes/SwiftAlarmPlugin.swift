@@ -400,7 +400,7 @@ public class SwiftAlarmPlugin: NSObject, FlutterPlugin {
     private func mixOtherAudios() {
         do {
             let category = respectSilentMode ? AVAudioSession.Category.ambient : AVAudioSession.Category.playback
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers])
+            try AVAudioSession.sharedInstance().setCategory(category, mode: .default, options: [.mixWithOthers])
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
             NSLog("SwiftAlarmPlugin: Error setting up audio session with option mixWithOthers: \(error.localizedDescription)")
@@ -409,7 +409,7 @@ public class SwiftAlarmPlugin: NSObject, FlutterPlugin {
 
     private func duckOtherAudios() {
         do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.duckOthers])
+            try AVAudioSession.sharedInstance().setCategory(category, mode: .default, options: [.duckOthers])
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
             NSLog("SwiftAlarmPlugin: Error setting up audio session with option duckOthers: \(error.localizedDescription)")
