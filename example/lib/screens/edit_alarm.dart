@@ -98,19 +98,20 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
       vibrate: vibrate,
       systemVolume: systemVolume,
       audioVolume: audioVolume,
-      notificationTitle: showNotification ? 'Alarm example' : null,
-      notificationBody: showNotification ? 'Your alarm ($id) is ringing' : null,
       assetAudioPath: assetAudio,
+      notificationTitle: 'Alarm example',
+      notificationBody: 'Your alarm ($id) is ringing',
     );
     return alarmSettings;
   }
 
   void saveAlarm() {
+    if (loading) return;
     setState(() => loading = true);
     Alarm.set(alarmSettings: buildAlarmSettings()).then((res) {
       if (res) Navigator.pop(context, true);
+      setState(() => loading = false);
     });
-    setState(() => loading = false);
   }
 
   void deleteAlarm() {
